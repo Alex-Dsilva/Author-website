@@ -50,8 +50,7 @@ export default function Home() {
       {/* ================= 2. ABOUT PAGE ================= */}
       <section id="about" className="max-w-6xl mx-auto p-6 py-24 flex flex-col md:flex-row items-center gap-16">
         <div className="w-full md:w-5/12">
-           {/* Image styled with petal design */}
-           <img src="/IMG-20260513-WA0000.jpg" alt="Deborah M Tungnung" className="w-full h-auto rounded-tl-[80px] rounded-br-[80px] rounded-tr-[10px] rounded-bl-[10px] shadow-2xl border-4 border-white object-cover" />
+           <img src="/IMG-20260513-WA0000.jpg" alt="Deborah M Tungnung" className="w-full h-auto rounded-t-full shadow-2xl border-4 border-white" />
         </div>
         <div className="w-full md:w-7/12 flex flex-col justify-center text-center md:text-left">
           <h2 className="text-sm uppercase tracking-[0.3em] text-[#C9A164] font-semibold mb-2">The Author</h2>

@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 
 // Make sure these match the import paths that worked for you!
-import Navbar from "../components/Navbar"
-import BookHero from "../components/BookHero"
-import Countdown from "../components/Countdown"
-import ReviewCarousel from "../components/ReviewCarousel"
+import Navbar from "./components/Navbar"
+import BookHero from "./components/BookHero"
+import Countdown from "./components/Countdown"
+import ReviewCarousel from "./components/ReviewCarousel"
 
 const galleryImages = [
   "/IMG-20260513-WA0000.jpg", 

@@ -1,10 +1,11 @@
 "use client"
 import { useState, useEffect } from 'react'
 
-import Navbar from "./Navbar"
-import BookHero from "./BookHero"
-import Countdown from "./Countdown"
-import ReviewCarousel from "./ReviewCarousel"
+// Corrected import paths pointing to the components folder!
+import Navbar from "../components/Navbar"
+import BookHero from "../components/BookHero"
+import Countdown from "../components/Countdown"
+import ReviewCarousel from "../components/ReviewCarousel"
 
 const galleryImages = [
   "/IMG-20260513-WA0000.jpg", 
@@ -118,7 +119,7 @@ export default function Home() {
           
           <ReviewCarousel />
 
-          {/* NEW: Leave a Review Form */}
+          {/* Leave a Review Form */}
           <div className="mt-24 max-w-2xl mx-auto bg-[#FAF7F2] p-8 md:p-12 rounded-2xl border border-[#D4AF37]/20 shadow-lg">
             <h3 className="text-3xl font-serif mb-2 text-center text-[#2C201C]">Share Your Thoughts</h3>
             <p className="text-center text-[#2C201C]/60 mb-8 font-light italic">How did Art of Mind impact your journey?</p>
@@ -166,7 +167,6 @@ export default function Home() {
       <footer id="contact" className="bg-[#1A1310] text-[#FAF7F2] py-20 px-6 relative z-10 border-t-4 border-[#D4AF37]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left mb-16">
           
-          {/* Brand Col */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-3xl font-serif mb-6 text-[#D4AF37] tracking-widest uppercase">Art of Mind</h3>
             <p className="text-[#FAF7F2]/60 font-light leading-relaxed max-w-xs italic">
@@ -174,7 +174,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Quick Links */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="text-sm uppercase tracking-widest mb-6 text-[#D4AF37] font-semibold">Explore</h4>
             <div className="flex flex-col gap-4">
@@ -185,7 +184,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Contact Col */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="text-sm uppercase tracking-widest mb-6 text-[#D4AF37] font-semibold">Connect</h4>
             <p className="text-[#FAF7F2]/60 mb-6 font-light">For press inquiries, literary events, or reader letters.</p>
@@ -193,7 +191,6 @@ export default function Home() {
               hello@deborahmtungnung.com
             </a>
             
-            {/* Social Icons */}
             <div className="flex gap-6">
               <a href="#" className="text-[#FAF7F2]/60 hover:text-[#D4AF37] font-serif uppercase tracking-widest text-sm transition-colors">Instagram</a>
               <a href="#" className="text-[#FAF7F2]/60 hover:text-[#D4AF37] font-serif uppercase tracking-widest text-sm transition-colors">X / Twitter</a>
@@ -201,7 +198,6 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Copyright */}
         <div className="text-center pt-8 border-t border-[#FAF7F2]/10 text-[#FAF7F2]/40 text-xs tracking-[0.2em] uppercase">
           &copy; {new Date().getFullYear()} Deborah M Tungnung. All rights reserved.
         </div>

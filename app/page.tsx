@@ -55,8 +55,8 @@ export default function Home() {
             setOriginalPrice('€37.99')
             break
           case 'INR': // India
-            setPrice('₹499')
-            setOriginalPrice('₹299')
+            setPrice('₹299')
+            setOriginalPrice('₹499')
             break
           case 'CAD': // Canada
             setPrice('CA$26.99')

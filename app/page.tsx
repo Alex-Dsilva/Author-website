@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react'
 
+// Corrected relative imports for your setup
 import Navbar from "./components/Navbar"
 import BookHero from "./components/BookHero"
 import Countdown from "./components/Countdown"
@@ -19,10 +20,15 @@ export default function Home() {
   const [rating, setRating] = useState(5) 
   const [mounted, setMounted] = useState(false)
   const [offerExpired, setOfferExpired] = useState(false)
+  
+  // Dynamic Pricing States
+  const [price, setPrice] = useState("Loading...")
+  const [originalPrice, setOriginalPrice] = useState("...")
 
-  // Checks if the user's 24 hours have passed
   useEffect(() => {
     setMounted(true)
+    
+    // 1. Check if the 24-hour urgency offer has expired
     const checkExpiration = () => {
       const storedTime = localStorage.getItem('bookOfferStartTime')
       if (storedTime && Date.now() > parseInt(storedTime) + 24 * 60 * 60 * 1000) {
@@ -30,7 +36,49 @@ export default function Home() {
       }
     }
     checkExpiration()
-    const id = setInterval(checkExpiration, 1000) // Recheck every second
+    const id = setInterval(checkExpiration, 1000)
+
+    // 2. Fetch Currency based on IP (NO POPUPS!)
+    const fetchLocalCurrency = async () => {
+      try {
+        // This free API checks their IP address, not their GPS, so it never asks for permission
+        const res = await fetch('https://ipapi.co/json/')
+        const data = await res.json()
+        
+        switch(data.currency) {
+          case 'GBP': // United Kingdom
+            setPrice('£15.99')
+            setOriginalPrice('£31.99')
+            break
+          case 'EUR': // Europe
+            setPrice('€18.99')
+            setOriginalPrice('€37.99')
+            break
+          case 'INR': // India
+            setPrice('₹1,499')
+            setOriginalPrice('₹2,999')
+            break
+          case 'CAD': // Canada
+            setPrice('CA$26.99')
+            setOriginalPrice('CA$54.99')
+            break
+          case 'AUD': // Australia
+            setPrice('AU$27.99')
+            setOriginalPrice('AU$55.99')
+            break
+          default: // Default to USD for US and unsupported regions
+            setPrice('$19.99')
+            setOriginalPrice('$39.99')
+        }
+      } catch (error) {
+        // Fallback safely to USD if they have a strict ad-blocker or VPN
+        setPrice('$19.99')
+        setOriginalPrice('$39.99')
+      }
+    }
+
+    fetchLocalCurrency()
+
     return () => clearInterval(id)
   }, [])
 
@@ -105,11 +153,11 @@ export default function Home() {
 
             <div className="text-xl mb-8 font-serif text-[#402824]/60 uppercase tracking-widest flex flex-col items-center lg:items-start gap-2">
               {mounted && offerExpired ? (
-                <div>Price <span className="font-bold text-[#402824] text-4xl ml-4 normal-case">$39.99</span></div>
+                <div>Price <span className="font-bold text-[#402824] text-4xl ml-4 normal-case">{originalPrice}</span></div>
               ) : mounted ? (
                 <div className="flex items-center gap-4">
-                  <span className="line-through text-[#402824]/40 text-2xl">$39.99</span>
-                  <span className="font-bold text-[#CB8D88] text-4xl normal-case">$19.99</span>
+                  <span className="line-through text-[#402824]/40 text-2xl">{originalPrice}</span>
+                  <span className="font-bold text-[#CB8D88] text-4xl normal-case">{price}</span>
                 </div>
               ) : (
                 <div className="h-10"></div> /* Placeholder during loading to prevent layout shift */

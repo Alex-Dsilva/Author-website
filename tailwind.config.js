@@ -1,23 +1,11 @@
-{
-  "name": "art-of-mind",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {},
   },
-  "dependencies": {
-    "next": "14.2.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  },
-  "devDependencies": {
-    "@types/node": "20.12.7",
-    "@types/react": "18.3.1",
-    "typescript": "5.4.5",
-    "tailwindcss": "3.4.3",
-    "autoprefixer": "10.4.19",
-    "postcss": "8.4.38"
-  }
+  plugins: [],
 }

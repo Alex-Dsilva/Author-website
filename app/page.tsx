@@ -1,11 +1,20 @@
 "use client"
 import { useState, useEffect } from 'react'
 
-// Importing your existing components!
-import Navbar from "./components/Navbar"
-import BookHero from "./components/BookHero"
-import Countdown from "./components/Countdown"
-import ReviewCarousel from "./components/ReviewCarousel"
+// Make sure these match the import paths that worked for you!
+import Navbar from "../components/Navbar"
+import BookHero from "../components/BookHero"
+import Countdown from "../components/Countdown"
+import ReviewCarousel from "../components/ReviewCarousel"
+
+const galleryImages = [
+  "/1000033611.jpg", 
+  "/1000033612.jpg", 
+  "/1000033610.jpg", 
+  "/1000033647.jpg", 
+  "/1000033650.jpg",
+  "/1000033632.jpg"
+]
 
 export default function Home() {
   const [price, setPrice] = useState("Loading...")
@@ -23,15 +32,15 @@ export default function Home() {
       {/* 1. NAVBAR COMPONENT */}
       <Navbar />
 
-      {/* 2. WELCOME / HERO COMPONENT */}
-      <section id="welcome">
+      {/* 2. WELCOME PAGE */}
+      <section id="welcome" className="min-h-[80vh] flex flex-col items-center justify-center pt-10">
         <BookHero />
       </section>
 
       {/* 3. ABOUT PAGE */}
       <section id="about" className="max-w-6xl mx-auto p-6 py-20 flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 aspect-square bg-[#ead8d3] rounded-3xl overflow-hidden shadow-xl">
-          <img src="https://via.placeholder.com/600x600?text=Deborah+Image" alt="Deborah M Tungnung" className="w-full h-full object-cover" />
+          <img src="/1000033647.jpg" alt="Deborah M Tungnung" className="w-full h-full object-cover" />
         </div>
         <div className="w-full md:w-1/2">
           <h2 className="text-4xl font-serif mb-6">About the Author</h2>
@@ -50,7 +59,6 @@ export default function Home() {
           <h2 className="text-3xl md:text-5xl font-serif mb-4">Special Limited Offer</h2>
           <p className="mb-8 text-[#7c615b]">Grab your copy directly from the publisher.</p>
           
-          {/* YOUR COUNTDOWN COMPONENT */}
           <div className="mb-8">
             <Countdown />
           </div>
@@ -69,9 +77,9 @@ export default function Home() {
       <section id="gallery" className="max-w-6xl mx-auto py-20 px-6">
         <h2 className="text-4xl font-serif text-center mb-12">Gallery</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="aspect-square bg-gray-200 rounded-2xl overflow-hidden shadow-md">
-              <img src={`https://via.placeholder.com/400x400?text=Gallery+Image+${i}`} alt={`Gallery ${i}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          {galleryImages.map((src, i) => (
+            <div key={i} className="aspect-square bg-[#ead8d3] rounded-2xl overflow-hidden shadow-md">
+              <img src={src} alt={`Gallery Image ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
           ))}
         </div>
@@ -79,22 +87,12 @@ export default function Home() {
 
       {/* 6. 3D REVIEW SECTION */}
       <section id="review" className="py-20 px-6 bg-gradient-to-b from-[#fff8f6] to-[#f7e4d6] overflow-hidden">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 mb-12">
-          <div className="w-full md:w-1/2 relative perspective-1000">
-            <img 
-              src="https://via.placeholder.com/500x600?text=Hand+Holding+Book" 
-              alt="Book in hand" 
-              className="w-full max-w-md mx-auto rounded-xl shadow-2xl transform rotate-y-6 hover:rotate-y-0 transition-transform duration-700" 
-            />
-          </div>
-          <div className="w-full md:w-1/2 flex flex-col gap-6">
-            <h2 className="text-4xl font-serif mb-4">What Readers Say</h2>
-            <p className="text-lg text-[#7c615b] mb-4">See why readers around the world are connecting with Art of Mind.</p>
-            
-            {/* YOUR REVIEW CAROUSEL COMPONENT */}
-            <ReviewCarousel />
-            
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-serif mb-4 text-center">What Readers Say</h2>
+          <p className="text-lg text-[#7c615b] mb-12 text-center">See why readers around the world are connecting with Art of Mind.</p>
+          
+          <ReviewCarousel />
+          
         </div>
       </section>
 

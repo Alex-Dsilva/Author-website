@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect } from 'react'
 
-// Corrected import paths pointing to the components folder!
-import Navbar from "../components/Navbar"
-import BookHero from "../components/BookHero"
-import Countdown from "../components/Countdown"
-import ReviewCarousel from "../components/ReviewCarousel"
+// Corrected exactly as you requested!
+import Navbar from "./components/Navbar"
+import BookHero from "./components/BookHero"
+import Countdown from "./components/Countdown"
+import ReviewCarousel from "./components/ReviewCarousel"
 
 const galleryImages = [
   "/IMG-20260513-WA0000.jpg", 

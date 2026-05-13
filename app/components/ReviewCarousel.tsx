@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useState, Suspense, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Html } from "@react-three/drei";
 import { a, useSpring } from "@react-spring/three";
+import { useRef, useState, Suspense, useEffect } from "react";
 import * as THREE from "three";
 
 type ReviewItem = {
@@ -22,85 +22,174 @@ const reviews: ReviewItem[] = [
   { id: 5, reviewer: "Elena R.", stars: 5, text: "Stunning 3D presentation and profound words inside.", skin: "#6b442a" },
 ];
 
-function ReviewCard({ review }: { review: ReviewItem }) {
+type HandProps = {
+  review: ReviewItem;
+  index: number;
+  total: number;
+  activeIndex: number;
+};
+
+function StarRow({ stars }: { stars: number }) {
   return (
-    <div style={{
-        width: "240px",
-        borderRadius: "20px 20px 4px 4px",
-        background: "rgba(253,248,244,0.98)",
-        border: "1px solid rgba(201,161,100,0.4)",
-        boxShadow: "0 15px 35px rgba(64,40,36,0.15)",
-        padding: "14px 18px",
-        backdropFilter: "blur(10px)",
-        color: "#402824",
-        fontFamily: "Georgia, serif",
-        pointerEvents: "none"
-      }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-        <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#C9A164", color: "white", display: "grid", placeItems: "center", fontSize: "14px", fontWeight: "bold" }}>
-          {review.reviewer.charAt(0)}
-        </div>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: "13px" }}>{review.reviewer}</div>
-          <div style={{ color: "#C9A164", fontSize: "12px" }}>{"★".repeat(review.stars)}</div>
-        </div>
-      </div>
-      <p style={{ fontSize: "12px", lineHeight: "1.4", fontStyle: "italic", margin: 0 }}>"{review.text}"</p>
+    <div style={{ color: "#C9A164", fontSize: 13, letterSpacing: 2 }}>
+      {"★".repeat(stars)}
+      <span style={{ opacity: 0.3 }}>{"★".repeat(5 - stars)}</span>
     </div>
   );
 }
 
-// Added isMobile prop so the 3D object knows how to position itself
-function HandAndBook({ review, isActive, wrapped, isMobile }: { review: ReviewItem; isActive: boolean; wrapped: number; isMobile: boolean }) {
-  const visualRef = useRef<THREE.Group>(null);
+function ReviewCard({ review }: { review: ReviewItem }) {
+  return (
+    <div
+      style={{
+        width: 250, // Slightly narrower for mobile screens
+        borderRadius: "24px 24px 4px 4px",
+        background: "rgba(253,248,244,0.98)",
+        border: "1px solid rgba(201,161,100,0.4)",
+        boxShadow: "0 20px 40px rgba(64,40,36,0.15)",
+        padding: "14px 18px", // Reduced padding to save vertical space
+        backdropFilter: "blur(12px)",
+        color: "#402824",
+        fontFamily: "Georgia, serif",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+        <div
+          style={{
+            width: 34,
+            height: 34,
+            borderRadius: 999,
+            display: "grid",
+            placeItems: "center",
+            background: "#C9A164",
+            color: "white",
+            fontSize: 14,
+            fontWeight: "bold",
+            fontFamily: "sans-serif"
+          }}
+        >
+          {review.reviewer.charAt(0)}
+        </div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 14, fontFamily: "sans-serif" }}>{review.reviewer}</div>
+          <StarRow stars={review.stars} />
+        </div>
+      </div>
+      <div style={{ fontSize: 13, lineHeight: 1.4, fontStyle: "italic", opacity: 0.9 }}>
+        "{review.text}"
+      </div>
+    </div>
+  );
+}
+
+function BookFace() {
+  return (
+    <div
+      style={{
+        width: 92,
+        height: 130,
+        borderRadius: 4,
+        overflow: "hidden",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+        backgroundColor: "#CB8D88"
+      }}
+    >
+      {/* Clean image path pointing to your public folder */}
+      <img 
+        src="/1000033650.jpg" 
+        alt="Art of Mind Cover" 
+        style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+      />
+    </div>
+  );
+}
+
+function ProceduralHand({ color }: { color: string }) {
+  return (
+    <group>
+      <mesh position={[0, -0.46, 0]} castShadow receiveShadow>
+        <boxGeometry args={[0.78, 0.62, 0.2]} />
+        <meshStandardMaterial color={color} roughness={0.6} metalness={0.1} />
+      </mesh>
+      {[-0.25, -0.08, 0.08, 0.25].map((x, i) => (
+        <mesh
+          key={x}
+          castShadow
+          receiveShadow
+          position={[x, -0.02 + (i === 0 || i === 3 ? -0.03 : 0.01), 0.02]}
+        >
+          <capsuleGeometry args={[0.07, 0.34, 4, 10]} />
+          <meshStandardMaterial color={color} roughness={0.6} metalness={0.1} />
+        </mesh>
+      ))}
+      <mesh
+        castShadow
+        receiveShadow
+        position={[-0.42, -0.44, 0.05]}
+        rotation={[0, 0, -0.9]}
+      >
+        <capsuleGeometry args={[0.075, 0.24, 4, 10]} />
+        <meshStandardMaterial color={color} roughness={0.6} metalness={0.1} />
+      </mesh>
+    </group>
+  );
+}
+
+function HandCard({ review, index, total, activeIndex }: HandProps) {
+  const visualRef = useRef<any>(null);
+
+  const middle = Math.floor(total / 2);
+  const relative = index - activeIndex;
+  let wrapped = relative;
+  if (relative > middle) wrapped = relative - total;
+  if (relative < -middle) wrapped = relative + total;
+
+  const isActive = index === activeIndex;
   
-  // DYNAMIC MATH: Shrinks and raises the object on mobile to fit the screen
-  const finalX = wrapped * (isMobile ? 1.8 : 2.5);
-  const finalY = isActive ? (isMobile ? 1.3 : 0.7) : (isMobile ? 0.6 : 0);
-  const finalZ = isActive ? 1.5 : -Math.abs(wrapped) * 0.8;
-  const scale = isActive ? (isMobile ? 0.85 : 1.1) : (isMobile ? 0.6 : 0.8);
+  const finalX = wrapped * 2.45;
+  // Raised the active book much higher (1.2) so the review card has room below it!
+  const finalY = isActive ? 1.2 : 0.2; 
+  const finalZ = isActive ? 1.45 : -Math.abs(wrapped) * 0.55;
+  const finalRotY = isActive ? 0 : -wrapped * 0.32;
+  const finalRotZ = isActive ? 0 : wrapped * -0.08;
+  const finalScale = isActive ? 1.15 : 0.86;
 
   const spring = useSpring({
     position: [finalX, finalY, finalZ] as any,
-    rotation: [0, isActive ? 0 : -wrapped * 0.3, isActive ? 0 : wrapped * -0.1] as any,
-    scale: [scale, scale, scale] as any,
-    config: { mass: 1, tension: 120, friction: 20 }
+    rotation: [0, finalRotY, finalRotZ] as any,
+    scale: [finalScale, finalScale, finalScale] as any,
+    config: { mass: 1.1, tension: 125, friction: 20 },
   });
 
   useFrame((state) => {
-    if (visualRef.current && isActive) {
-      visualRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.5) * 0.05;
-      visualRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.7) * 0.02;
-    }
+    const g = visualRef.current;
+    if (!g || !isActive) return;
+    g.position.y = finalY + Math.sin(state.clock.elapsedTime * 1.6) * 0.06;
+    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.8) * 0.03;
   });
 
   return (
-    <a.group position={spring.position} rotation={spring.rotation} scale={spring.scale}>
+    <a.group position={spring.position as any} rotation={spring.rotation as any} scale={spring.scale as any}>
       <group ref={visualRef}>
-        {/* Palm */}
-        <mesh position={[0, -0.4, 0]} castShadow>
-          <boxGeometry args={[0.7, 0.5, 0.15]} />
-          <meshStandardMaterial color={review.skin} roughness={0.7} />
+        <ProceduralHand color={review.skin} />
+        
+        <mesh position={[0, 0.62, 0.06]} castShadow receiveShadow>
+          <boxGeometry args={[0.76, 1.12, 0.09]} />
+          <meshStandardMaterial color="#402824" roughness={0.8} />
         </mesh>
-        {/* Fingers */}
-        {[-0.22, -0.07, 0.07, 0.22].map((x) => (
-          <mesh key={x} position={[x, 0, 0.02]} castShadow>
-            <capsuleGeometry args={[0.06, 0.3, 4, 8]} />
-            <meshStandardMaterial color={review.skin} />
-          </mesh>
-        ))}
-        {/* Book */}
-        <mesh position={[0, 0.6, 0.05]} castShadow>
-          <boxGeometry args={[0.8, 1.15, 0.1]} />
-          <meshStandardMaterial color="#402824" />
+
+        <mesh position={[-0.35, 0.62, 0.1]} castShadow receiveShadow>
+          <boxGeometry args={[0.06, 1.12, 0.11]} />
+          <meshStandardMaterial color="#FAF7F2" roughness={0.2} />
         </mesh>
-        <Html transform position={[0, 0.6, 0.11]} pointerEvents="none">
-          <div style={{ width: "94px", height: "132px", borderRadius: "2px", overflow: "hidden" }}>
-             <img src="/IMG_20260513_091812.jpg" alt="Book Cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
+
+        <Html transform position={[0, 0.62, 0.12]} style={{ pointerEvents: 'none' }}>
+          <BookFace />
         </Html>
+
         {isActive && (
-          <Html transform position={[0, -1.4, 0.15]} pointerEvents="none">
+          // Pulled the review card slightly closer to the hand (-1.35)
+          <Html transform position={[0, -1.35, 0.15]} style={{ pointerEvents: 'none' }}>
             <ReviewCard review={review} />
           </Html>
         )}
@@ -109,60 +198,77 @@ function HandAndBook({ review, isActive, wrapped, isMobile }: { review: ReviewIt
   );
 }
 
-export default function ReviewCarousel() {
-  const [active, setActive] = useState(2);
-  const [isMobile, setIsMobile] = useState(false);
+function Scene({ activeIndex }: { activeIndex: number }) {
+  return (
+    <>
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[3, 6, 4]} intensity={2} color="#FDF8F4" castShadow />
+      <pointLight position={[-4, 2, 3]} intensity={1} color="#CB8D88" />
+      <pointLight position={[4, 1, 2]} intensity={1} color="#C9A164" />
+      <Environment preset="city" />
 
-  // Checks screen size on load and whenever the window resizes
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Set initial value
-    handleResize();
-    
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+      {reviews.map((review, index) => (
+        <HandCard key={review.id} review={review} index={index} total={reviews.length} activeIndex={activeIndex} />
+      ))}
+    </>
+  );
+}
+
+const buttonStyle: React.CSSProperties = {
+  width: 46,
+  height: 46,
+  borderRadius: 999,
+  border: "1px solid rgba(201,161,100,0.5)",
+  background: "rgba(253,248,244,0.9)",
+  color: "#402824",
+  cursor: "pointer",
+  fontSize: 22,
+  backdropFilter: "blur(12px)",
+  display: "grid",
+  placeItems: "center",
+  boxShadow: "0 4px 12px rgba(64,40,36,0.15)",
+};
+
+export default function ReviewCarousel(): JSX.Element {
+  const [activeIndex, setActiveIndex] = useState<number>(2);
+
+  const previous = () => setActiveIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+  const next = () => setActiveIndex((prev) => (prev + 1) % reviews.length);
 
   return (
-    // Slightly increased minHeight to give extra breathing room on phones
-    <div style={{ width: "100%", height: "70vh", minHeight: "550px", position: "relative", background: "transparent" }}>
-      <Canvas shadows camera={{ position: [0, 0, 12], fov: 40 }}>
-        <ambientLight intensity={1.5} />
-        <pointLight position={[5, 5, 5]} intensity={1} />
-        <Environment preset="city" />
-        <Suspense fallback={null}>
-          {reviews.map((r, i) => {
-            const middle = Math.floor(reviews.length / 2);
-            let wrapped = i - active;
-            if (wrapped > middle) wrapped -= reviews.length;
-            if (wrapped < -middle) wrapped += reviews.length;
-            
-            // Passing the isMobile flag down to the 3D items
-            return <HandAndBook key={r.id} review={r} isActive={i === active} wrapped={wrapped} isMobile={isMobile} />;
-          })}
-        </Suspense>
-      </Canvas>
+    // Increased minHeight to 750px to ensure the review card and buttons NEVER overlap!
+    <div style={{ width: "100%", height: "85vh", minHeight: "750px", position: "relative", overflow: "hidden", background: "transparent" }}>
+      
+      <Suspense fallback={null}>
+        {/* Pulled the camera back to 13.5 to fit everything beautifully on mobile screens */}
+        <Canvas shadows camera={{ position: [0, 0.5, 13.5], fov: 45 }} style={{ width: "100%", height: "100%" }}>
+          <Scene activeIndex={activeIndex} />
+        </Canvas>
+      </Suspense>
 
-      {/* Controls */}
-      <div style={{ position: "absolute", bottom: "20px", left: "50%", transform: "translateX(-50%)", zIndex: 40, display: "flex", gap: "15px", alignItems: "center" }}>
-        <button 
-          onClick={() => setActive((a) => (a - 1 + reviews.length) % reviews.length)}
-          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px", display: "grid", placeItems: "center" }}
-        >←</button>
-        
-        <div style={{ display: "flex", gap: "8px", background: "rgba(255,255,255,0.7)", padding: "8px 12px", borderRadius: "20px", backdropFilter: "blur(5px)" }}>
-          {reviews.map((_, i) => (
-            <div key={i} onClick={() => setActive(i)} style={{ width: i === active ? "20px" : "8px", height: "8px", borderRadius: "4px", background: i === active ? "#C9A164" : "#C9A16444", transition: "0.3s", cursor: "pointer" }} />
+      <div style={{ position: "absolute", left: "50%", bottom: 24, transform: "translateX(-50%)", zIndex: 40, display: "flex", alignItems: "center", gap: 14 }}>
+        <button onClick={previous} aria-label="Previous" style={buttonStyle}>←</button>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 999, background: "rgba(253,248,244,0.7)", border: "1px solid rgba(201,161,100,0.3)", backdropFilter: "blur(12px)" }}>
+          {reviews.map((item, index) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Go to review ${index + 1}`}
+              style={{
+                width: index === activeIndex ? 26 : 8,
+                height: 8,
+                borderRadius: 999,
+                border: "none",
+                background: index === activeIndex ? "#C9A164" : "rgba(201,161,100,0.3)",
+                cursor: "pointer",
+                transition: "all 180ms ease",
+              }}
+            />
           ))}
         </div>
 
-        <button 
-          onClick={() => setActive((a) => (a + 1) % reviews.length)}
-          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px", display: "grid", placeItems: "center" }}
-        >→</button>
+        <button onClick={next} aria-label="Next" style={buttonStyle}>→</button>
       </div>
     </div>
   );

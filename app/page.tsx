@@ -8,12 +8,12 @@ import Countdown from "../components/Countdown"
 import ReviewCarousel from "../components/ReviewCarousel"
 
 const galleryImages = [
-  "/1000033611.jpg", 
-  "/1000033612.jpg", 
-  "/1000033610.jpg", 
-  "/1000033647.jpg", 
-  "/1000033650.jpg",
-  "/1000033632.jpg"
+  "/IMG-20260513-WA0000.jpg", 
+  "/IMG-20260513-WA0001.jpg", 
+  "/IMG-20260513-WA0002.jpg", 
+  "/IMG-20260513-WA0003.jpg", 
+  "/IMG-20260513-WA0004.jpg",
+  "/IMG-20260513-WA0007.jpg"
 ]
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
       {/* 3. ABOUT PAGE */}
       <section id="about" className="max-w-6xl mx-auto p-6 py-20 flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 aspect-square bg-[#ead8d3] rounded-3xl overflow-hidden shadow-xl">
-          <img src="/1000033647.jpg" alt="Deborah M Tungnung" className="w-full h-full object-cover" />
+          <img src="/IMG_20260513_091812.jpg" alt="Deborah M Tungnung" className="w-full h-full object-cover" />
         </div>
         <div className="w-full md:w-1/2">
           <h2 className="text-4xl font-serif mb-6">About the Author</h2>

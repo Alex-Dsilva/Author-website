@@ -187,7 +187,8 @@ function HandCard({ review, index, total, activeIndex }: HandProps) {
   });
 
   return (
-    <a.group position={spring.position} rotation={spring.rotation} scale={spring.scale}>
+    // FIX APPLIED HERE: Added "as any" to bypass TypeScript strict checking on spring values
+    <a.group position={spring.position as any} rotation={spring.rotation as any} scale={spring.scale as any}>
       <group ref={visualRef}>
         <ProceduralHand color={review.skin} />
         

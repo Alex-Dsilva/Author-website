@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 
 // Importing your existing components!
-import Navbar from "@/components/Navbar"
-import BookHero from "@/components/BookHero"
-import Countdown from "@/components/Countdown"
-import ReviewCarousel from "@/components/ReviewCarousel"
+import Navbar from "../components/Navbar"
+import BookHero from "../components/BookHero"
+import Countdown from "../components/Countdown"
+import ReviewCarousel from "../components/ReviewCarousel"
 
 export default function Home() {
   const [price, setPrice] = useState("Loading...")

@@ -96,7 +96,7 @@ function BookFace() {
       }}
     >
       <img 
-        src="/1000033650.jpg" 
+        src="/IMG_20260513_091812.jpg" 
         alt="Art of Mind Cover" 
         style={{ width: "100%", height: "100%", objectFit: "cover" }} 
       />

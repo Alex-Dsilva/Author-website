@@ -1,30 +1,56 @@
 "use client"
-import { useState } from 'react'
-const links = ['Welcome','About','Book','Gallery','Review','Signup','Contact']
+import { useState, useEffect } from 'react'
+
+const links = ['About', 'Book', 'Gallery', 'Review', 'Signup', 'Contact']
+
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // This makes the navbar dynamic! It listens for scrolling.
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <header style={{position:'sticky',top:0,zIndex:50,background:'rgba(255,248,246,.95)',backdropFilter:'blur(12px)',borderBottom:'1px solid rgba(0,0,0,.06)'}}>
-      <div style={{maxWidth:1200,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 20px',gap:16}}>
-        <a href="#welcome" style={{fontWeight:900,textTransform:'uppercase',letterSpacing:'0.12em',fontSize:14,color:'#3b2723',textDecoration:'none'}}>Art of Mind</a>
-        <nav style={{display:'flex',gap:4,flexWrap:'wrap'}}>
-          {links.map(l=><a key={l} href={`#${l.toLowerCase()}`} style={{padding:'8px 12px',borderRadius:999,fontSize:13,fontWeight:800,color:'#5c3c36',textDecoration:'none'}}>{l}</a>)}
+    <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+      scrolled 
+        ? 'bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#D4AF37]/20 py-3 shadow-sm' 
+        : 'bg-transparent py-6'
+    }`}>
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6">
+        <a href="#welcome" className={`font-serif tracking-widest uppercase transition-all duration-500 ${scrolled ? 'text-xl text-[#2C201C]' : 'text-2xl text-[#2C201C]'}`}>
+          Art of Mind
+        </a>
+        
+        <nav className="hidden md:flex gap-8">
+          {links.map(l => (
+            <a key={l} href={`#${l.toLowerCase()}`} className="text-sm font-semibold tracking-wider text-[#2C201C] hover:text-[#D4AF37] transition-colors uppercase">
+              {l}
+            </a>
+          ))}
         </nav>
-        <button onClick={()=>setOpen(o=>!o)} aria-label="Menu"
-          style={{position:'relative',width:44,height:44,borderRadius:'50%',background:'linear-gradient(135deg,#f7e4d6,#dca58b)',border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <span style={{position:'absolute',width:20,height:2.5,background:'#fff',borderRadius:99}} />
-          <span style={{position:'absolute',width:20,height:2.5,background:'#fff',borderRadius:99,transform:'translateY(-7px)'}} />
-          <span style={{position:'absolute',width:20,height:2.5,background:'#fff',borderRadius:99,transform:'translateY(7px)'}} />
-          <i style={{position:'absolute',left:6,top:7,width:7,height:13,background:'#86a56a',borderRadius:'100% 0 100% 0',transform:'rotate(-40deg)'}} />
-          <i style={{position:'absolute',right:6,top:7,width:7,height:13,background:'#86a56a',borderRadius:'0 100% 0 100%',transform:'rotate(40deg)'}} />
-          <i style={{position:'absolute',left:4,bottom:7,width:6,height:11,background:'#86a56a',borderRadius:'100% 0 100% 0',transform:'rotate(-70deg)'}} />
-          <i style={{position:'absolute',right:4,bottom:7,width:6,height:11,background:'#86a56a',borderRadius:'0 100% 0 100%',transform:'rotate(70deg)'}} />
+
+        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 flex flex-col items-center justify-center gap-1.5">
+          <span className={`w-6 h-0.5 transition-all ${scrolled ? 'bg-[#2C201C]' : 'bg-[#2C201C]'}`}></span>
+          <span className={`w-6 h-0.5 transition-all ${scrolled ? 'bg-[#2C201C]' : 'bg-[#2C201C]'}`}></span>
+          <span className={`w-6 h-0.5 transition-all ${scrolled ? 'bg-[#2C201C]' : 'bg-[#2C201C]'}`}></span>
         </button>
       </div>
-      {open&&<div style={{maxWidth:1200,margin:'0 auto',padding:'0 20px 16px',display:'grid',gap:8}}>
-        {links.map(l=><a key={l} href={`#${l.toLowerCase()}`} onClick={()=>setOpen(false)}
-          style={{display:'block',padding:'14px 18px',borderRadius:18,background:'#fff',border:'1px solid #ead8d3',fontWeight:900,fontSize:15,color:'#3b2723',textDecoration:'none'}}>{l}</a>)}
-      </div>}
+
+      {menuOpen && (
+        <div className="md:hidden flex flex-col p-6 gap-4 bg-[#FAF7F2] border-t border-[#D4AF37]/20 absolute w-full left-0 shadow-lg">
+          {links.map(l => (
+            <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} className="text-[#2C201C] font-serif text-lg text-center uppercase tracking-widest hover:text-[#D4AF37]">
+              {l}
+            </a>
+          ))}
+        </div>
+      )}
     </header>
   )
 }

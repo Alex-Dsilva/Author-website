@@ -16,134 +16,135 @@ const galleryImages = [
   "/IMG-20260513-WA0007.jpg"
 ]
 
-export default function Home() {
+eexport default function Home() {
   const [price, setPrice] = useState("Loading...")
 
   // Simulate fetching dynamic price from Lulu API
   useEffect(() => {
     setTimeout(() => {
-      setPrice("$19.99") // Replace this with actual Lulu API fetch later
+      setPrice("$19.99") 
     }, 1500)
   }, [])
 
   return (
-    <main className="bg-[#fff8f6] text-[#3b2723] min-h-screen font-sans">
+    <main className="bg-[#FAF7F2] text-[#2C201C] min-h-screen font-sans selection:bg-[#9BA98E] selection:text-white">
       
-      {/* 1. NAVBAR COMPONENT */}
       <Navbar />
 
-      {/* 2. WELCOME PAGE */}
-      <section id="welcome" className="min-h-[80vh] flex flex-col items-center justify-center pt-10">
-        <BookHero />
-      </section>
-
-      {/* 3. ABOUT PAGE */}
-      <section id="about" className="max-w-6xl mx-auto p-6 py-20 flex flex-col md:flex-row items-center gap-12">
-        <div className="w-full md:w-1/2 aspect-square bg-[#ead8d3] rounded-3xl overflow-hidden shadow-xl">
-          <img src="/IMG_20260513_091812.jpg" alt="Deborah M Tungnung" className="w-full h-full object-cover" />
-        </div>
-        <div className="w-full md:w-1/2">
-          <h2 className="text-4xl font-serif mb-6">About the Author</h2>
-          <p className="text-lg leading-relaxed text-[#7c615b] mb-4">
-            Deborah M Tungnung weaves intricate tales that speak directly to the soul. With a passion for uncovering the depths of human emotion, her work is recognized for its elegant feminine branding and uplifting messages.
+      {/* ================= 1. WELCOME PAGE ================= */}
+      <section id="welcome" className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 pb-12 bg-gradient-to-b from-[#E8D5C8]/40 to-[#FAF7F2]">
+        <h1 className="text-6xl md:text-8xl font-serif tracking-tight mb-6 text-[#2C201C]">Art of Mind</h1>
+        <p className="text-xl md:text-3xl font-light italic text-[#9BA98E] mb-12">By Deborah M Tungnung</p>
+        
+        <div className="max-w-2xl mx-auto bg-white/50 p-8 md:p-12 rounded-3xl border border-[#E8D5C8]/50 shadow-sm">
+          <p className="text-lg md:text-2xl leading-relaxed text-[#2C201C]/80 font-serif italic">
+            "Let go of who you think you're supposed to be; embrace who you are."
           </p>
-          <p className="text-lg leading-relaxed text-[#7c615b]">
-            "Art of Mind" is her latest masterpiece, designed to offer comfort and inspiration to readers worldwide.
-          </p>
+          <span className="text-sm uppercase tracking-widest mt-6 block font-semibold text-[#9BA98E]">- Brené Brown</span>
         </div>
       </section>
 
-      {/* 4. BOOK PAGE WITH LULU API & COUNTDOWN */}
-      <section id="book" className="bg-[#f7e4d6] py-20 px-6">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col items-center text-center">
-          <h2 className="text-3xl md:text-5xl font-serif mb-4">Special Limited Offer</h2>
-          <p className="mb-8 text-[#7c615b]">Grab your copy directly from the publisher.</p>
+      {/* ================= 2. ABOUT PAGE ================= */}
+      <section id="about" className="max-w-6xl mx-auto p-6 py-24 flex flex-col md:flex-row items-center gap-16">
+        <div className="w-full md:w-5/12">
+           {/* Using the first image for the Author section */}
+           <img src="/IMG-20260513-WA0000.jpg" alt="Deborah M Tungnung" className="w-full h-auto rounded-t-full shadow-xl border-4 border-white" />
+        </div>
+        <div className="w-full md:w-7/12 flex flex-col justify-center text-center md:text-left">
+          <h2 className="text-4xl md:text-5xl font-serif mb-8 text-[#2C201C]">About the Author</h2>
+          <p className="text-lg leading-relaxed text-[#2C201C]/80 mb-6">
+            Deborah is a visionary author and advocate for mental wellness. She weaves intricate tales that speak directly to the soul, combining beautiful prose with transformative insights.
+          </p>
+          <p className="text-lg leading-relaxed text-[#2C201C]/80">
+            With her elegant, minimalist approach, she invites readers on a journey of resilience, self-discovery, and profound healing through the art of the mind.
+          </p>
+        </div>
+      </section>
+
+      {/* ================= 3. BOOK PAGE (SELL SECTION) ================= */}
+      <section id="book" className="bg-[#E8D5C8]/30 py-24 px-6 border-y border-[#E8D5C8]/50">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
           
-          <div className="mb-8">
-            <Countdown />
+          <div className="w-full lg:w-1/2 flex justify-center scale-90 md:scale-100">
+            <BookHero />
           </div>
 
-          <div className="text-2xl mb-6">
-            Current Price: <span className="font-bold text-[#86a56a] text-4xl">{price}</span>
-          </div>
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <h2 className="text-4xl md:text-5xl font-serif mb-6 text-[#2C201C]">Order Your Copy</h2>
+            <p className="text-lg text-[#2C201C]/80 mb-10 max-w-md">
+              Secure your limited edition copy directly from the publisher. Includes exclusive author content.
+            </p>
+            
+            <div className="mb-10 w-full max-w-md">
+              <Countdown />
+            </div>
 
-          <button className="px-10 py-4 bg-[#3b2723] text-white font-bold rounded-full hover:bg-black transition-all shadow-lg w-full md:w-auto">
-            Purchase via Lulu
-          </button>
+            <div className="text-2xl mb-8 font-serif">
+              Current Price: <span className="font-bold text-[#9BA98E] text-4xl ml-2">{price}</span>
+            </div>
+
+            <button className="px-12 py-4 bg-[#9BA98E] text-white font-semibold tracking-widest uppercase rounded-sm hover:bg-[#839276] transition-all shadow-md w-full sm:w-auto">
+              Purchase via Lulu
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* 5. GALLERY PAGE */}
-      <section id="gallery" className="max-w-6xl mx-auto py-20 px-6">
-        <h2 className="text-4xl font-serif text-center mb-12">Gallery</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {/* ================= 4. GALLERY PAGE ================= */}
+      <section id="gallery" className="max-w-6xl mx-auto py-24 px-6">
+        <h2 className="text-4xl md:text-5xl font-serif text-center mb-16 text-[#2C201C]">Visual Journey</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
           {galleryImages.map((src, i) => (
-            <div key={i} className="aspect-square bg-[#ead8d3] rounded-2xl overflow-hidden shadow-md">
-              <img src={src} alt={`Gallery Image ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+            <div key={i} className="aspect-[4/5] overflow-hidden bg-[#E8D5C8]/20 group rounded-sm">
+              <img src={src} alt={`Gallery Image ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" />
             </div>
           ))}
         </div>
       </section>
 
-      {/* 6. 3D REVIEW SECTION */}
-      <section id="review" className="py-20 px-6 bg-gradient-to-b from-[#fff8f6] to-[#f7e4d6] overflow-hidden">
+      {/* ================= 5. REVIEWS ================= */}
+      <section id="review" className="py-24 px-6 bg-[#FAF7F2] overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-serif mb-4 text-center">What Readers Say</h2>
-          <p className="text-lg text-[#7c615b] mb-12 text-center">See why readers around the world are connecting with Art of Mind.</p>
-          
+          <h2 className="text-4xl md:text-5xl font-serif mb-12 text-center text-[#2C201C]">Reader Experiences</h2>
           <ReviewCarousel />
-          
         </div>
       </section>
 
-      {/* 7. SIGNUP PAGE */}
-      <section id="signup" className="py-24 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-serif mb-4">Be the First to Know</h2>
-          <p className="text-lg text-[#7c615b] mb-8">Join the VIP list to get a sneak peek at Deborah's upcoming work and exclusive content.</p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
+      {/* ================= 6. SIGNUP & CONTACT ================= */}
+      <section id="signup" className="py-24 px-6 text-center bg-[#2C201C] text-[#FAF7F2]">
+        <div className="max-w-3xl mx-auto mb-20">
+          <h2 className="text-4xl font-serif mb-4">Join the List</h2>
+          <p className="text-lg text-[#FAF7F2]/70 mb-8">Receive gentle updates on upcoming works, poetry snippets, and exclusive content.</p>
+          <form className="flex flex-col sm:flex-row gap-0 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
             <input 
               type="email" 
-              placeholder="Enter your email address" 
-              className="flex-1 px-6 py-4 rounded-full border border-[#ead8d3] focus:outline-none focus:ring-2 focus:ring-[#dca58b]"
+              placeholder="Your email address" 
+              className="flex-1 px-6 py-4 rounded-t-sm sm:rounded-l-sm sm:rounded-tr-none border-none text-[#2C201C] focus:outline-none focus:ring-2 focus:ring-[#9BA98E]"
               required
             />
-            <button type="submit" className="px-8 py-4 bg-[#dca58b] text-white font-bold rounded-full hover:bg-[#c98d7d] transition-colors shadow-md">
+            <button type="submit" className="px-8 py-4 bg-[#9BA98E] text-white font-bold rounded-b-sm sm:rounded-r-sm sm:rounded-bl-none hover:bg-[#839276] transition-colors uppercase tracking-widest text-sm">
               Subscribe
             </button>
           </form>
         </div>
-      </section>
 
-      {/* 8. CONTACT & FOOTER */}
-      <section id="contact" className="bg-[#3b2723] text-[#f7e4d6] py-16 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-          
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 text-left pt-12 border-t border-[#FAF7F2]/10">
           <div>
-            <h2 className="text-3xl font-serif mb-6">Get in Touch</h2>
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-              <input type="text" placeholder="Your Name" className="p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-[#dca58b]" />
-              <input type="email" placeholder="Your Email" className="p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-[#dca58b]" />
-              <textarea placeholder="Your Message" rows={4} className="p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-[#dca58b]"></textarea>
-              <button type="submit" className="px-6 py-4 bg-[#86a56a] text-white font-bold rounded-xl hover:bg-[#6b8554] transition-colors">
-                Send Message
-              </button>
-            </form>
-          </div>
-
-          <div className="flex flex-col justify-center">
-            <h3 className="text-2xl font-serif mb-4">Connect</h3>
-            <p className="mb-6 opacity-80">I would love to hear your thoughts on the book or answer any questions you might have.</p>
-            <div className="flex gap-4 mb-8">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#dca58b] transition-colors">IG</a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#dca58b] transition-colors">FB</a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#dca58b] transition-colors">X</a>
+            <h3 className="text-2xl font-serif mb-6">Connect</h3>
+            <p className="mb-8 text-[#FAF7F2]/70 max-w-sm">I would love to hear how the book resonated with you, or answer any press inquiries.</p>
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 rounded-full bg-[#FAF7F2]/10 flex items-center justify-center hover:bg-[#9BA98E] transition-colors">IG</a>
+              <a href="#" className="w-10 h-10 rounded-full bg-[#FAF7F2]/10 flex items-center justify-center hover:bg-[#9BA98E] transition-colors">FB</a>
+              <a href="#" className="w-10 h-10 rounded-full bg-[#FAF7F2]/10 flex items-center justify-center hover:bg-[#9BA98E] transition-colors">X</a>
             </div>
-            <p className="opacity-80">Email: hello@example.com</p>
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-[#FAF7F2]/70 mb-2">General Inquiries</p>
+            <a href="mailto:hello@deborahmtungnung.com" className="text-xl font-serif hover:text-[#9BA98E] transition-colors">hello@deborahmtungnung.com</a>
           </div>
         </div>
-
-        <div className="text-center pt-8 border-t border-white/10 opacity-60 text-sm">
+        
+        <div className="text-center pt-16 opacity-50 text-xs tracking-widest uppercase">
           &copy; {new Date().getFullYear()} Deborah M Tungnung. All rights reserved.
         </div>
       </section>

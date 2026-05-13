@@ -16,7 +16,7 @@ const galleryImages = [
   "/IMG-20260513-WA0007.jpg"
 ]
 
-eexport default function Home() {
+export default function Home() {
   const [price, setPrice] = useState("Loading...")
 
   // Simulate fetching dynamic price from Lulu API

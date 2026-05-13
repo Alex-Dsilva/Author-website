@@ -6,7 +6,6 @@ import { Environment, Html } from "@react-three/drei";
 import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
 
-
 type ReviewItem = {
   id: number;
   reviewer: string;
@@ -51,13 +50,15 @@ function ReviewCard({ review }: { review: ReviewItem }) {
   );
 }
 
-function HandAndBook({ review, isActive, wrapped }: { review: ReviewItem; isActive: boolean; wrapped: number }) {
+// Added isMobile prop so the 3D object knows how to position itself
+function HandAndBook({ review, isActive, wrapped, isMobile }: { review: ReviewItem; isActive: boolean; wrapped: number; isMobile: boolean }) {
   const visualRef = useRef<THREE.Group>(null);
   
-  const finalX = wrapped * 2.5;
-  const finalY = isActive ? 0.7 : 0;
+  // DYNAMIC MATH: Shrinks and raises the object on mobile to fit the screen
+  const finalX = wrapped * (isMobile ? 1.8 : 2.5);
+  const finalY = isActive ? (isMobile ? 1.3 : 0.7) : (isMobile ? 0.6 : 0);
   const finalZ = isActive ? 1.5 : -Math.abs(wrapped) * 0.8;
-  const scale = isActive ? 1.1 : 0.8;
+  const scale = isActive ? (isMobile ? 0.85 : 1.1) : (isMobile ? 0.6 : 0.8);
 
   const spring = useSpring({
     position: [finalX, finalY, finalZ] as any,
@@ -95,7 +96,7 @@ function HandAndBook({ review, isActive, wrapped }: { review: ReviewItem; isActi
         </mesh>
         <Html transform position={[0, 0.6, 0.11]} pointerEvents="none">
           <div style={{ width: "94px", height: "132px", borderRadius: "2px", overflow: "hidden" }}>
-             <img src="/IMG_20260513_091812.jpg" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+             <img src="/IMG_20260513_091812.jpg" alt="Book Cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
         </Html>
         {isActive && (
@@ -110,9 +111,24 @@ function HandAndBook({ review, isActive, wrapped }: { review: ReviewItem; isActi
 
 export default function ReviewCarousel() {
   const [active, setActive] = useState(2);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Checks screen size on load and whenever the window resizes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Set initial value
+    handleResize();
+    
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div style={{ width: "100%", height: "60vh", minHeight: "500px", position: "relative", background: "transparent" }}>
+    // Slightly increased minHeight to give extra breathing room on phones
+    <div style={{ width: "100%", height: "70vh", minHeight: "550px", position: "relative", background: "transparent" }}>
       <Canvas shadows camera={{ position: [0, 0, 12], fov: 40 }}>
         <ambientLight intensity={1.5} />
         <pointLight position={[5, 5, 5]} intensity={1} />
@@ -123,19 +139,21 @@ export default function ReviewCarousel() {
             let wrapped = i - active;
             if (wrapped > middle) wrapped -= reviews.length;
             if (wrapped < -middle) wrapped += reviews.length;
-            return <HandAndBook key={r.id} review={r} isActive={i === active} wrapped={wrapped} />;
+            
+            // Passing the isMobile flag down to the 3D items
+            return <HandAndBook key={r.id} review={r} isActive={i === active} wrapped={wrapped} isMobile={isMobile} />;
           })}
         </Suspense>
       </Canvas>
 
-      {/* Controls: zIndex 40 is below Navbar (50) but above 3D */}
+      {/* Controls */}
       <div style={{ position: "absolute", bottom: "20px", left: "50%", transform: "translateX(-50%)", zIndex: 40, display: "flex", gap: "15px", alignItems: "center" }}>
         <button 
           onClick={() => setActive((a) => (a - 1 + reviews.length) % reviews.length)}
-          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px" }}
+          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px", display: "grid", placeItems: "center" }}
         >←</button>
         
-        <div style={{ display: "flex", gap: "8px", background: "rgba(255,255,255,0.7)", padding: "8px 12px", borderRadius: "20px" }}>
+        <div style={{ display: "flex", gap: "8px", background: "rgba(255,255,255,0.7)", padding: "8px 12px", borderRadius: "20px", backdropFilter: "blur(5px)" }}>
           {reviews.map((_, i) => (
             <div key={i} onClick={() => setActive(i)} style={{ width: i === active ? "20px" : "8px", height: "8px", borderRadius: "4px", background: i === active ? "#C9A164" : "#C9A16444", transition: "0.3s", cursor: "pointer" }} />
           ))}
@@ -143,7 +161,7 @@ export default function ReviewCarousel() {
 
         <button 
           onClick={() => setActive((a) => (a + 1) % reviews.length)}
-          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px" }}
+          style={{ width: "44px", height: "44px", borderRadius: "50%", border: "1px solid #C9A164", background: "white", cursor: "pointer", fontSize: "20px", display: "grid", placeItems: "center" }}
         >→</button>
       </div>
     </div>

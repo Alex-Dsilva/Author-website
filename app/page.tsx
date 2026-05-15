@@ -254,8 +254,9 @@ export default function Home() {
               hello@deborahmtungnung.com
             </a>
             <div className="flex gap-6">
-              <a href="#" className="text-[#FDF8F4]/60 hover:text-[#CB8D88] font-serif uppercase tracking-widest text-sm transition-colors">Instagram</a>
-              <a href="#" className="text-[#FDF8F4]/60 hover:text-[#CB8D88] font-serif uppercase tracking-widest text-sm transition-colors">X / Twitter</a>
+              <a href="https://www.instagram.com/debby_tungnung?igsh=ZWIzbjl1ZXRka3M%3D&utm_source=qr" className="text-[#FDF8F4]/60 hover:text-[#CB8D88] font-serif uppercase tracking-widest text-sm transition-colors">Instagram</a>
+              <a href="https://x.com/zolianudebby" className="text-[#FDF8F4]/60 hover:text-[#CB8D88] font-serif uppercase tracking-widest text-sm transition-colors">X / Twitter</a>
+              <a href="https://m.facebook.com/debby.tungnung/" className="text-[#FDF8F4]/60 hover:text-[#CB8D88] font-serif uppercase tracking-widest text-sm transition-colors">Facebook</a>
             </div>
           </div>
         </div>
